@@ -1,0 +1,62 @@
+.intro {
+  margin-top: 60px;
+  @include d(s){
+    margin-top: 20px; // diminuindo a margin para mobile
+  }
+}
+
+.logo {
+  margin-bottom: 60px;
+}
+
+.intro-info {
+  border-right: $border;
+  max-width: 320px; // colocando um max-width par aque fique responsivo e mais perto do info e não da imagem
+  p {
+    padding-top: 10px;
+    /* &:first-child {
+        PODERIA SE FAZER DESA MANEIRA TAMBEM
+    }*/
+  }
+  p:first-child {
+    border-bottom: $border;
+  }
+}
+
+.intro-telefone {
+  color: $bege-escuro;
+  font-weight: bold;
+  @include d(s){
+    margin-bottom: 40px;
+  }
+  &::after {
+    content: '/ / / /';
+    display: block;
+    margin-top: 200px;
+    font-size: 220px;
+    letter-spacing: -90px; //para que um traço não fique na frente do outro utilizamos o letter spaceindo (espaçamento da letra) para negativo
+    color: $cinza;
+    @include d(m){
+      margin-top: 80px;
+      font-size: 160px;
+      letter-spacing: -70px;
+    }
+    @include d(s){
+      display: none;
+    }
+  }
+}
+
+.aberto {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50px;
+  background-color: $green;
+  margin-left: 30px;
+}
+
+.intro-foto {
+  border: 10px solid $bege-escuro;
+  width: 100%;
+}

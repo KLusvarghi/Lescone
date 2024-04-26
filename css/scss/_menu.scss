@@ -1,0 +1,47 @@
+.menu {
+  margin-top: 120px;
+  margin-bottom: 120px;
+  @include d(s){
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+}
+
+.menu-item {
+  margin-bottom: 60px;
+  h2 {
+    @include tipo-2(24);
+    margin-bottom: 1em;
+  }
+  li {
+    @include tipo-1(18);
+    line-height: em(35, 18);
+    span {
+      font-family: $fonte-2;
+      color: $bege-escuro;
+      display: inline-block; // por padrão ele já é display inline, mas definindo dessa maneira para que eu possa definir um tamanho para ele
+      width: 70px;
+      text-align: right; //assim todos ficam alinahdos
+      margin-right: 10px; // apenas para dar uma maior distancia para a direita
+      margin-left: -80px; // sendo -80px pq são 70px do width + 10px do margin-right
+      @include d(s){
+        margin-left: 0px;
+        width: auto; // para alinhar a direita
+      }
+    }
+  }
+  img {
+    border-radius: 50%;
+    border: 10px solid $bege-escuro;
+    position: absolute; // para que eu consiga posicioanr a esquerda
+    right: 0px;
+    margin-top: 50px; // alinhando ao centro dos elementos
+    @include d(l){
+      right: 120px;
+    }
+    @include d(s){
+      width: 140px;
+      margin-top: 0px; // alinhando ao centro dos elementos
+    }
+  }
+}

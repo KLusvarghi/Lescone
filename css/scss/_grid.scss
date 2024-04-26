@@ -1,0 +1,156 @@
+// variaveis do grid
+$cols: 12;
+$gutter: 20px;
+// tipos de dispositivos,  utilizado para os containers
+$l-device: 1200px;
+$m-device: 760px;
+$s-device: 480px;
+
+// box-sizing
+
+*, *::after, *::before {
+  box-sizing: border-box;
+  /*
+    Exemplo de box-sizing: border-box;
+      Se eu utilizar sem ele e fizer:
+        width: 200px;
+        padding: 20px;
+        // sendo assim a largura total dessa minha caixa 240px, sendo 200 de width e 20px de padding da direira e 20 da esquerda
+
+      Agora, utilziando o ele, o tamnaho total dessa minha caixa será de 200px, porque ele ajunta tudo de comprime ao tamnaho de  200px definido pelo with:
+        Ficando 20px de padding da esquerda e da direira e 160px de width
+  */
+}
+
+// Mixin de media-querie
+
+@mixin d($size){
+  @if $size == l {
+    @media screen and (min-width: $l-device) { 
+      @content;
+    }
+  } @else if $size == m {
+    @media screen and (min-width: $m-device) and (max-width: #{$l-device - 1}) {
+      @content;
+    }
+  } @else if $size == s {
+    @media screen and (max-width: ($m-device - 1 ) ) {
+      @content;
+    }
+  }
+}
+
+
+/*funçao do grid*/
+
+// sendo "off set" a quantidade de colunas em branco
+
+@function grid($col, $offset: false){
+  $width: $col / $cols  * 100 + "%";
+  // Exemplo: grid(4) == 6 / 12 * 100 === 50%
+
+  $result: calc(#{$width} - #{$gutter});
+  @if $offset == offset { //caso a função seja chamada e passado: grid(4, offset), ele entrará nessa condição
+    $gutter: $gutter / 2;
+    $result: calc(#{$width} + #{$gutter});
+    // Exemplo: grid(6, offset) == 
+    // 20 / 2 = 10;
+    // 50% + 10;
+  }
+  @return $result;
+}
+
+  /*Gera as classes de grid*/
+@for $i from 1 through $cols {
+  .grid-#{$i} {
+    width: grid($i);
+  }
+}
+
+
+/*Mixin com estrutura do grid*/ 
+@mixin grid-structure {
+  float: left;
+  min-height: 1px;
+  margin-left: $gutter / 2;
+  margin-right: $gutter / 2;
+  @include d(s) { // dispositivo mobile
+    width: 100%;
+    float: none;
+    margin-left: none;
+    margin-right: none;
+  }
+}
+
+
+// adicionando o seletor "class" esse seletor será adicionado seu conteudo para todos os atributos que contenham class "grid"
+// sendo o "^" uma referencia para todos os intend que começarem com "grid" neste exemplo
+// se no caso eu coloque [alt], ele irá selecioanr todos os atributos que tiverem alt
+
+[class^="grid"] {
+  @include grid-structure;
+}
+
+
+// Gera as classe offset
+@for $i from  1 through $cols {
+  .offset-#{$i}{
+    margin-left: grid($i, offset);
+    @extend %offset;
+  }
+}
+
+// fazendo isso para que quando ele for para o mobile ele suma com o offset e deixe apenas o item em uma coluna só
+@include d(s){
+  %offset {
+    margin-left: 0px;
+  }
+}
+
+
+/*Mixn de clearFix*/ 
+// explicação sobre crearfix: https://www.origamid.com/codex/para-que-serve-o-clearfix-no-css/
+@mixin clearfix {
+  &::after, &::before {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+
+/*  mixn do meu container  */
+@mixin container {
+  max-width: $l-device;
+  margin: 0px auto;
+  position: relative;
+  @include d(m) {
+    max-width: $m-device;
+  }
+  @include d(s) {
+    max-width: $s-device;
+    // como eu tirei as margens, eu adiciono aqui para que o conteúdo não fique grudado nas laterais
+    padding-left: 10px; 
+    padding-right: 10px;
+  }
+  @include clearfix;
+}
+
+.container {
+  @include container;
+}
+
+// Para quando eu quiser um container dentro de outro eu tiro o margin left e right para que a caixa de dentro se alinhe com a de caixa pai
+@mixin row {
+  margin-left: -$gutter / 2;
+  margin-right: -$gutter / 2;
+  @include d(s){
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  @include clearfix;
+}
+
+.row {
+  @include row;
+}
